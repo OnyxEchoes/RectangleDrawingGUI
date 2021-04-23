@@ -13,7 +13,7 @@ import java.util.*;
 public class RectangleDrawingGUI extends Application {
 
 	private Pane pane;
-	private Rectangle rectangle;
+	private Rectangle rectangle, anotherRectangle;
 	private RadioButton red, yellow, blue, thinBorder, thickBorder;
 	private CheckBox fill;
 	private Button clearButton;
@@ -39,7 +39,8 @@ public class RectangleDrawingGUI extends Application {
 
 
 		rectangleBeingDrawn = false;
-		
+		anotherRectangle = new Rectangle(-10, -10);
+		pane.getChildren().add(anotherRectangle);
 		pane.setOnMouseClicked(this::handleMouseClicks);
 		pane.setOnMouseMoved(this::handleMouseMotion);
 		
@@ -102,11 +103,14 @@ public class RectangleDrawingGUI extends Application {
 			
 			rectangle.setX(x);
 			rectangle.setY(y);
+			anotherRectangle.setX(x);
+			anotherRectangle.setY(y);
 			
 		} else { // rectangleBeingDrawn==true
-			
-			rectangleBeingDrawn = false;	
-			pane.getChildren().add(rectangle);
+			rectangleBeingDrawn = false;
+			drawnRectangles.add(rectangle);
+			pane.getChildren().add(drawnRectangles.get(count));
+			count++;
 		}
 		
 		//Color Selection
@@ -118,10 +122,13 @@ public class RectangleDrawingGUI extends Application {
 		for (RadioButton colorButton : radioButtonColorList) {
 			if (red.isSelected()) {
 				rectangle.setStroke(Color.RED);
+				anotherRectangle.setStroke(Color.RED);
 			} else if (yellow.isSelected()) {
 				rectangle.setStroke(Color.YELLOW);
+				anotherRectangle.setStroke(Color.YELLOW);
 			} else {// blue.isSelected()
 				rectangle.setStroke(Color.BLUE);
+				anotherRectangle.setStroke(Color.BLUE);
 			}
 		}
 
@@ -133,8 +140,10 @@ public class RectangleDrawingGUI extends Application {
 		for (RadioButton borderThicknessButton : radioButtonBorderWidth) {
 			if (thinBorder.isSelected()) {
 				rectangle.setStrokeWidth(2);
+				anotherRectangle.setStrokeWidth(2);
 			} else { // if(thickBorder.isSelected())
 				rectangle.setStrokeWidth(7);
+				anotherRectangle.setStrokeWidth(7);
 			}
 		}
 		
@@ -142,13 +151,17 @@ public class RectangleDrawingGUI extends Application {
 		if(fill.isSelected()) {
 			if (red.isSelected()) {
 				rectangle.setFill(Color.RED);
+				anotherRectangle.setFill(Color.RED);
 			} else if (yellow.isSelected()) {
 				rectangle.setFill(Color.YELLOW);
+				anotherRectangle.setFill(Color.YELLOW);
 			} else {// blue.isSelected()
 				rectangle.setFill(Color.BLUE);
+				anotherRectangle.setFill(Color.BLUE);
 			}
 		} else {//!fill.isSelected()
 			rectangle.setFill(Color.TRANSPARENT);
+			anotherRectangle.setFill(Color.TRANSPARENT);
 		}
 		
 		
@@ -161,28 +174,28 @@ public class RectangleDrawingGUI extends Application {
 			double x2 = event.getX();
 			double y2 = event.getY();
 			
-			//rectangle.setWidth(x2);
-			//rectangle.setHeight(y2);
-			
-			
-			
-			
 			if(x2<x) {
 				//movingLeft = true;
 				rectangle.setX(x2);
 				rectangle.setWidth(x-x2);
+				anotherRectangle.setX(x2);
+				anotherRectangle.setWidth(x-x2);
 			} else {//x>=x
 				//movingLeft = false;
 				rectangle.setWidth(x2-x);
+				anotherRectangle.setWidth(x2-x);
 			}
 			
 			if(y2<y) {
 				//movingUp = true;
 				rectangle.setY(y2);
 				rectangle.setHeight(y-y2);
+				anotherRectangle.setY(y2);
+				anotherRectangle.setHeight(y-y2);
 			} else {//y2>=y
 				//movingUp = false;
 				rectangle.setHeight(y2-y);
+				anotherRectangle.setHeight(y2-y);
 			}
 			
 			//System.out.println("x" + x + "    y:" + y);
@@ -196,15 +209,13 @@ public class RectangleDrawingGUI extends Application {
 	}
 
 	private void handleButton(ActionEvent event) {
-		//Clear the board. I'm thinking a for each loop, null on the ArrayList. 
-		
-		
-		/*
+
 		for(int i = 0; i<drawnRectangles.size(); i++) {
-			drawnRectangles.remove(i);
+			pane.getChildren().remove(drawnRectangles.get(i));
+			
 		}
-		*/
 		
+		pane.getChildren().remove(anotherRectangle);
 		
 		
 	}
