@@ -13,14 +13,14 @@ import java.util.*;
 public class RectangleDrawingGUI extends Application {
 
 	private Pane pane;
-	private Rectangle rectangle, initialRectangle, paneBorder;
+	private Rectangle rectangle;
 	private RadioButton red, yellow, blue, thinBorder, thickBorder;
 	private CheckBox fill;
 	private Button clearButton;
-	private boolean rectangleBeingDrawn;
+	private boolean rectangleBeingDrawn;//, movingLeft, movingUp;
 	private double x, y;
 	private int count = 0;
-	private boolean movingLeft, movingUp;
+	
 	
 	
 	ArrayList<Rectangle> drawnRectangles = new ArrayList<Rectangle>();//each rectangle drawn on the board
@@ -36,20 +36,10 @@ public class RectangleDrawingGUI extends Application {
 		pane.setPrefHeight(500);
 		pane.setPrefWidth(500);
 		mainVBox.getChildren().add(pane);
-		/*//Can't draw over this rectangle if I do this
-		paneBorder = new Rectangle(500, 500, Color.TRANSPARENT);
-		paneBorder.setStroke(Color.BLACK);
-		paneBorder.setStrokeWidth(3);
-		mainVBox.getChildren().add(paneBorder);
-		*/
+
 
 		rectangleBeingDrawn = false;
-		//initialRectangle = new Rectangle(-10, -10);// Color.TRANSPARENT
-		//drawnRectangles.add(rectangle);
-		//pane.getChildren().add(initialRectangle);
-		//rectangle = new Rectangle();
-		rectangle = new Rectangle(0, 0);
-		pane.getChildren().add(rectangle);
+		
 		pane.setOnMouseClicked(this::handleMouseClicks);
 		pane.setOnMouseMoved(this::handleMouseMotion);
 		
@@ -106,8 +96,7 @@ public class RectangleDrawingGUI extends Application {
 		
 		if (!rectangleBeingDrawn) { // rectangleBeingDrawn==false
 			rectangleBeingDrawn = true;			
-			//rectangle = new Rectangle();
-			
+			rectangle = new Rectangle();
 			x = event.getX();
 			y = event.getY();
 			
@@ -116,15 +105,8 @@ public class RectangleDrawingGUI extends Application {
 			
 		} else { // rectangleBeingDrawn==true
 			
-			rectangleBeingDrawn = false;
-			//drawnRectangles.add(rectangle);
-			
-			
-			//pane.getChildren().add(drawnRectangles.get(count));
-			//pane.getChildren().add(rectangle);
-			//count++;
-			
-			
+			rectangleBeingDrawn = false;	
+			pane.getChildren().add(rectangle);
 		}
 		
 		//Color Selection
@@ -179,27 +161,34 @@ public class RectangleDrawingGUI extends Application {
 			double x2 = event.getX();
 			double y2 = event.getY();
 			
+			//rectangle.setWidth(x2);
+			//rectangle.setHeight(y2);
 			
-			//rectangle.setWidth(x - x2);
-			//rectangle.setHeight(y - y2);
 			
-			if(x2<0) {
-				x2 = x;
-				x = event.getX();
-			} else {//x>=0
-				rectangle.setWidth(x2);
+			
+			
+			if(x2<x) {
+				//movingLeft = true;
+				rectangle.setX(x2);
+				rectangle.setWidth(x-x2);
+			} else {//x>=x
+				//movingLeft = false;
+				rectangle.setWidth(x2-x);
 			}
 			
-			if(y2<0) {
-				y2 = y;
-				y = event.getY();
-			} else {//y2>=0
-				rectangle.setHeight(y2);
+			if(y2<y) {
+				//movingUp = true;
+				rectangle.setY(y2);
+				rectangle.setHeight(y-y2);
+			} else {//y2>=y
+				//movingUp = false;
+				rectangle.setHeight(y2-y);
 			}
 			
-			//rectangle.setWidth(xEnd);
-			//rectangle.setHeight(yEnd);
-			
+			//System.out.println("x" + x + "    y:" + y);
+			//Whatever I click will always be the coordinate. 
+			//System.out.println("x2: " + x2 + "    y" + y2);
+			//as you move up, y2 becomes lower. as you move left, x2 becomes lower. 
 			//System.out.println((x2-x) + "   " + (y2-y));
 			
 		} 
@@ -209,9 +198,7 @@ public class RectangleDrawingGUI extends Application {
 	private void handleButton(ActionEvent event) {
 		//Clear the board. I'm thinking a for each loop, null on the ArrayList. 
 		
-		//drawnRectangles.clear();
-		//drawnRectangles = null;
-		//no such thing as pane.clear();
+		
 		/*
 		for(int i = 0; i<drawnRectangles.size(); i++) {
 			drawnRectangles.remove(i);
