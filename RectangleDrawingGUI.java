@@ -17,15 +17,11 @@ public class RectangleDrawingGUI extends Application {
 	private RadioButton red, yellow, blue, thinBorder, thickBorder;
 	private CheckBox fill;
 	private Button clearButton;
-	private boolean rectangleBeingDrawn;//, movingLeft, movingUp;
+	private boolean rectangleBeingDrawn;
 	private double x, y;
 	private int count = 0;
-	
-	
-	
-	ArrayList<Rectangle> drawnRectangles = new ArrayList<Rectangle>();//each rectangle drawn on the board
-	
-	
+
+	ArrayList<Rectangle> drawnRectangles = new ArrayList<Rectangle>();
 
 	public void start(Stage primaryStage) {
 		VBox mainVBox = new VBox();
@@ -37,14 +33,11 @@ public class RectangleDrawingGUI extends Application {
 		pane.setPrefWidth(500);
 		mainVBox.getChildren().add(pane);
 
-
 		rectangleBeingDrawn = false;
 		anotherRectangle = new Rectangle(-10, -10);
 		pane.getChildren().add(anotherRectangle);
 		pane.setOnMouseClicked(this::handleMouseClicks);
 		pane.setOnMouseMoved(this::handleMouseMotion);
-		
-		
 		
 		Scene scene = new Scene(mainVBox, 500, 650, Color.TRANSPARENT);
 
@@ -94,7 +87,7 @@ public class RectangleDrawingGUI extends Application {
 
 	private void handleMouseClicks(MouseEvent event) {
 		
-		
+		//Behavior of rectangle
 		if (!rectangleBeingDrawn) { // rectangleBeingDrawn==false
 			rectangleBeingDrawn = true;			
 			rectangle = new Rectangle();
@@ -163,10 +156,6 @@ public class RectangleDrawingGUI extends Application {
 			rectangle.setFill(Color.TRANSPARENT);
 			anotherRectangle.setFill(Color.TRANSPARENT);
 		}
-		
-		
-		
-
 	}
 
 	private void handleMouseMotion(MouseEvent event) {
@@ -196,33 +185,20 @@ public class RectangleDrawingGUI extends Application {
 				//movingUp = false;
 				rectangle.setHeight(y2-y);
 				anotherRectangle.setHeight(y2-y);
-			}
-			
-			//System.out.println("x" + x + "    y:" + y);
-			//Whatever I click will always be the coordinate. 
-			//System.out.println("x2: " + x2 + "    y" + y2);
-			//as you move up, y2 becomes lower. as you move left, x2 becomes lower. 
-			//System.out.println((x2-x) + "   " + (y2-y));
-			
+			}			
 		} 
-
 	}
 
 	private void handleButton(ActionEvent event) {
 
 		for(int i = 0; i<drawnRectangles.size(); i++) {
 			pane.getChildren().remove(drawnRectangles.get(i));
-			
 		}
-		
-		pane.getChildren().remove(anotherRectangle);
-		
-		
+		pane.getChildren().remove(anotherRectangle);		
 	}
 
 	public static void main(String[] args) {
 		launch(args);
-
 	}
 
 }
